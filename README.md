@@ -42,7 +42,7 @@
 
   - feature_main（主要的功能页面，小动物驱赶、生长状态检测等）
 
-  - feature_Q&A（知识问答页面）
+  - feature_QA（知识问答页面）
 
   - feature_game（游戏页面）
 
