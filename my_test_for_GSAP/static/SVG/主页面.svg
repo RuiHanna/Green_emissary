@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2197 5400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#_未命名的渐变_31);
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-width: 0px;
+      }
+
+      .cls-2, .cls-9 {
+        fill: url(#_未命名的渐变_5);
+      }
+
+      .cls-2, .cls-9, .cls-7 {
+        opacity: .5;
+      }
+
+      .cls-10, .cls-11, .cls-8 {
+        fill: #9ac6a2;
+      }
+
+      .cls-12 {
+        clip-path: url(#clippath-2);
+      }
+
+      .cls-3 {
+        fill: none;
+      }
+
+      .cls-13 {
+        clip-path: url(#clippath-1);
+      }
+
+      .cls-4 {
+        fill: url(#_未命名的渐变_28);
+      }
+
+      .cls-5 {
+        fill: #134695;
+        opacity: .9;
+      }
+
+      .cls-14 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-6 {
+        fill: url(#_未命名的渐变_9);
+      }
+
+      .cls-7 {
+        fill: url(#_未命名的渐变_3);
+      }
+
+      .cls-11, .cls-15 {
+        stroke: #719c83;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+
+      .cls-15 {
+        fill: #71a370;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-3" x="196" y="4318" width="1921" height="1081"/>
+    </clipPath>
+    <linearGradient id="_未命名的渐变_31" data-name="未命名的渐变 31" x1="1098.5" y1="4460.15" x2="1098.5" y2="5345.29" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#998675"/>
+      <stop offset=".15" stop-color="#ab9783"/>
+      <stop offset=".35" stop-color="#baa68f"/>
+      <stop offset=".57" stop-color="#c4af96"/>
+      <stop offset=".89" stop-color="#c7b299"/>
+    </linearGradient>
+    <linearGradient id="_未命名的渐变_28" data-name="未命名的渐变 28" x1="1157" y1="3288.73" x2="1157" y2="4273.21" gradientTransform="translate(2314 7558) rotate(-180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3fa9f5" stop-opacity=".5"/>
+      <stop offset=".25" stop-color="#1776bd" stop-opacity=".63"/>
+      <stop offset=".47" stop-color="#00599c" stop-opacity=".7"/>
+      <stop offset=".69" stop-color="#0c4c97" stop-opacity=".83"/>
+      <stop offset=".89" stop-color="#134695" stop-opacity=".9"/>
+    </linearGradient>
+    <linearGradient id="_未命名的渐变_3" data-name="未命名的渐变 3" x1="1156.09" y1="2169.57" x2="1157.89" y2="3211.61" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".1" stop-color="#f5faff"/>
+      <stop offset=".27" stop-color="#dcedff"/>
+      <stop offset=".48" stop-color="#b2d8ff"/>
+      <stop offset=".73" stop-color="#78bbff"/>
+      <stop offset="1" stop-color="#39f"/>
+    </linearGradient>
+    <linearGradient id="_未命名的渐变_9" data-name="未命名的渐变 9" x1="1154.06" y1="1172.56" x2="1159.49" y2="2168.95" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#71a370"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <clipPath id="clippath-1">
+      <polygon class="cls-8" points="2117.5 1182.5 1157.5 1182.5 196.5 1182.5 196.5 1080.5 2117.5 1080.5 2117.5 1182.5"/>
+    </clipPath>
+    <linearGradient id="_未命名的渐变_5" data-name="未命名的渐变 5" x1="1156.09" y1="10.57" x2="1157.89" y2="1052.61" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d8e7f7"/>
+      <stop offset=".12" stop-color="#cee3f6"/>
+      <stop offset=".33" stop-color="#b5d8f6"/>
+      <stop offset=".59" stop-color="#8bc8f6"/>
+      <stop offset=".9" stop-color="#52b1f5"/>
+      <stop offset="1" stop-color="#3fa9f5"/>
+    </linearGradient>
+    <clipPath id="clippath-2">
+      <rect class="cls-2" x="197" width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <rect id="_深夜土壤衔接" data-name="深夜土壤衔接" class="cls-5" x="197" y="4319" width="1920" height="170"/>
+    <g id="_土壤" data-name="土壤">
+      <g class="cls-14">
+        <path class="cls-1" d="m2117,5400H197L0,4320l83.94,72.43c64.99,56.09,161.23,56.21,226.37.28h0c48.83-41.93,120.86-42.28,170.1-.84h0c67.42,56.74,165.86,56.86,233.42.28h0c49.68-41.61,122.2-41.07,171.26,1.27h0c64.37,55.55,159.65,55.79,224.3.56h0c49.91-42.64,123.39-42.73,173.41-.21h0c65.23,55.45,161.08,55.33,226.17-.28h0c49.63-42.4,122.66-42.67,172.61-.64h0c66.67,56.11,164.08,55.99,230.62-.28h0c49.48-41.85,121.99-41.67,171.26.42l113.55,97-80,910Z"/>
+      </g>
+    </g>
+    <rect id="_树底" data-name="树底" class="cls-4" x="197" y="3239" width="1920" height="1080" transform="translate(2314 7558) rotate(180)"/>
+    <rect id="_大树天空" data-name="大树天空" class="cls-7" x="197" y="2159" width="1920" height="1080"/>
+    <rect id="_平地" data-name="平地" class="cls-6" x="197.02" y="1181.5" width="1919.5" height="978.5"/>
+    <g id="_平地衔接" data-name="平地衔接">
+      <polygon class="cls-10" points="2117.5 1182.5 1157.5 1182.5 196.5 1182.5 196.5 1080.5 2117.5 1080.5 2117.5 1182.5"/>
+      <g class="cls-13">
+        <ellipse class="cls-15" cx="1157" cy="1211.25" rx="1031.5" ry="131.75"/>
+      </g>
+    </g>
+    <g id="_远山标题" data-name="远山标题">
+      <g>
+        <rect class="cls-9" x="197" width="1920" height="1080"/>
+        <g class="cls-12">
+          <path class="cls-11" d="m1120.32,1178.91c18.35-65.11,74.18-310,166.5-310s141.54,236.77,167.81,310"/>
+          <path class="cls-11" d="m1348.32,1235.91c18.35-65.11,74.18-310,166.5-310s141.54,236.77,167.81,310"/>
+          <path class="cls-11" d="m1944.06,1080.39c13.94-49.47,34-107,102-113,69.87-6.16,83.04,57.36,103,113"/>
+          <path class="cls-11" d="m173,1080.25c19.5-103,95.74-291.22,232.5-258.75,139,33,227,222.75,248,258.75"/>
+        </g>
+      </g>
+      <path class="cls-11" d="m591.5,1101.5c25-126,115-364,302-373,184.7-8.89,280.51,205.31,333.13,352"/>
+      <path class="cls-11" d="m1535.5,1080.5c24.97-88.58,101.07-226.5,226.66-226.5s207.6,174.88,243.34,274.5"/>
+    </g>
+  </g>
+</svg>
