@@ -5,48 +5,534 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-time Object Detection</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* 全局样式 */
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
             background-color: #f3f3f3;
+        }
+
+        /* 3x3 网格布局 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            width: 100vw;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+
+        #animation-container {
+        background-color: #fff; /* 设置为与其他网格项相同的颜色 */
+        grid-row: 1 / 2;
+        grid-column: 2 / 3;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* 防止溢出 */
+        }
+
+        /* 每个网格项的样式 */
+        .grid-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            height: 100%;
         }
 
-        #content {
-            text-align: center;
-            max-width: 820px;
-            margin-top: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .media-container {
+        /* 检测图像容器 */
+        #detection-container {
+            width: 100%;
+            height: 100%;
+            grid-row: 2 / 3;
+            grid-column: 2 / 3;
             display: flex;
-            max-width: 100%;
-            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 防止图像溢出 */
         }
 
-        .media-container img {
-            width: 640px; /* 调整图像宽度 */
-            height: 480px; /* 调整图像高度 */
+        /* 柱状图容器 */
+        #chart {
+            grid-row: 1 / 2;
+            grid-column: 1 / 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 饼状图容器 */
+        #pie-chart {
+            grid-row: 1 / 2;
+            grid-column: 3 / 4;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 折线图与饼图联动容器 */
+        #line-pie-chart {
+            grid-row: 2 / 4;
+            grid-column: 1 / 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 热力图容器 */
+        #heatmap-chart {
+            grid-row: 3 / 4;
+            grid-column: 2 / 4;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 气泡图容器 */
+        #bubble-chart {
+            grid-row: 2 / 3;
+            grid-column: 3 / 4;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 检测图像样式 */
+        #detectionResult {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 填充容器，保持比例 */
             border: 1px solid #ccc;
         }
     </style>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
 </head>
 <body>
-    <div id="content">
-        <h1>Real-time Object Detection</h1>
-        <div class="media-container">
-            <!-- 只显示检测结果图像 -->
+    <div class="grid-container">
+        <!-- 柱状图 -->
+        <div class="grid-item" id="chart"></div>
+
+         <!-- 第一排第二个网格项（新增） -->
+        <div class="grid-item" id="animation-container"></div>
+
+        <!-- 饼状图 -->
+        <div class="grid-item" id="pie-chart"></div>
+
+        <!-- 折线图与饼图联动 -->
+        <div class="grid-item" id="line-pie-chart"></div>
+
+        <!-- 检测图像 -->
+        <div class="grid-item" id="detection-container">
             <img id="detectionResult" src="{{ url_for('video_feed') }}" alt="Detection Result">
         </div>
+
+        <!-- 热力图 -->
+        <div class="grid-item" id="heatmap-chart"></div>
+
+        <!-- 气泡图 -->
+        <div class="grid-item" id="bubble-chart"></div>
+
+        <!-- 其他网格项（暂时留空） -->
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
     </div>
+
+    <script>
+        // 初始化柱状图
+        var chartDom = document.getElementById('chart');
+        var myChart = echarts.init(chartDom, 'dark');
+
+        // 初始化饼状图
+        var pieDom = document.getElementById('pie-chart');
+        var pieChart = echarts.init(pieDom, 'dark');
+
+        // 初始化折线图与饼图联动
+        var linePieDom = document.getElementById('line-pie-chart');
+        var linePieChart = echarts.init(linePieDom, 'dark');
+
+        // 初始化热力图
+        var heatmapDom = document.getElementById('heatmap-chart');
+        var heatmapChart = echarts.init(heatmapDom, 'dark');
+
+        // 初始化气泡图
+        var bubbleDom = document.getElementById('bubble-chart');
+        var bubbleChart = echarts.init(bubbleDom, 'dark');
+
+         // 在第一排第二个网格项中添加 ECharts 动画效果
+        var animationDom = document.getElementById('animation-container');
+        var animationChart = echarts.init(animationDom);
+        var animationOption = {
+            graphic: {
+                elements: [
+                    {
+                        type: 'text',
+                        left: 'center',
+                        top: 'center',
+                        style: {
+                            text: '小动物检测',
+                            fontSize:70,
+                            fontWeight: 'bold',
+                            lineDash: [0, 200],
+                            lineDashOffset: 0,
+                            fill: 'transparent',
+                            stroke: 'green',
+                            lineWidth: 1
+                        },
+                        keyframeAnimation: {
+                            duration: 3000,
+                            loop: true,
+                            keyframes: [
+                                {
+                                    percent: 0.7,
+                                    style: {
+                                        fill: 'transparent',
+                                        lineDashOffset: 200,
+                                        lineDash: [200, 0]
+                                    }
+                                },
+                                {
+                                    // Stop for a while.
+                                    percent: 0.8,
+                                    style: {
+                                        fill: 'transparent'
+                                    }
+                                },
+                                {
+                                    percent: 1,
+                                    style: {
+                                        fill: 'green'
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        };
+        animationChart.setOption(animationOption);
+
+        // 获取柱状图数据
+        function fetchChartData() {
+            fetch('/chart_data')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Chart Data:", data);  // 打印接收到的数据
+                    updateChart(data);
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
+        }
+
+        // 更新柱状图
+        function updateChart(data) {
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    data: data.labels
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        data: data.values,
+                        type: 'bar',
+                        showBackground: true,
+                        backgroundStyle: {
+                            color: 'rgba(180, 180, 180, 0.2)'
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        // 获取饼状图数据
+        function fetchPieData() {
+            fetch('/pie_data')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Pie Data:", data);  // 打印接收到的数据
+                    updatePieChart(data);
+                })
+                .catch(error => console.error('Error fetching pie data:', error));
+        }
+
+        // 更新饼状图
+        function updatePieChart(data) {
+            var option = {
+                legend: {
+                    top: 'bottom'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                series: [
+                    {
+                        name: '类别分布',
+                        type: 'pie',
+                        radius: [50, 100],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 8
+                        },
+                        data: data
+                    }
+                ]
+            };
+            pieChart.setOption(option);
+        }
+
+        // 获取时间序列数据
+        function fetchTimeSeriesData() {
+            fetch('/time_series_data')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Time Series Data:", data);  // 打印接收到的数据
+                    updateLinePieChart(data);
+                })
+                .catch(error => console.error('Error fetching time series data:', error));
+        }
+
+        // 更新折线图与饼图联动
+        function updateLinePieChart(data) {
+            var option = {
+                legend: {
+                    data: Object.keys(data.counts) // 显示当天前五多的动物种类
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: false
+                },
+                dataset: {
+                    source: [
+                        ['date', ...data.dates],
+                        ...Object.keys(data.counts).map(label => [label, ...data.counts[label]])
+                    ]
+                },
+                xAxis: { type: 'category' },
+                yAxis: { gridIndex: 0 },
+                grid: { top: '55%' },
+                series: [
+                    ...Object.keys(data.counts).map(() => ({
+                        type: 'line',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        emphasis: { focus: 'series' }
+                    })),
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '40%',
+                        center: ['50%', '30%'],
+                        emphasis: {
+                            focus: 'self'
+                        },
+                        label: {
+                            formatter: '{b}: {@2012} ({d}%)'
+                        },
+                        encode: {
+                            itemName: 'date',
+                            value: 'count',
+                            tooltip: 'count'
+                        }
+                    }
+                ]
+            };
+            linePieChart.on('updateAxisPointer', function (event) {
+                const xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) {
+                    const dimension = xAxisInfo.value + 1;
+                    linePieChart.setOption({
+                        series: {
+                            id: 'pie',
+                            label: {
+                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                            },
+                            encode: {
+                                value: dimension,
+                                tooltip: dimension
+                            }
+                        }
+                    });
+                }
+            });
+            linePieChart.setOption(option);
+        }
+
+        // 获取热力图数据
+        function fetchHeatmapData() {
+            fetch('/time_heatmap_data')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Heatmap Data:", data);  // 打印接收到的数据
+                    updateHeatmap(data);
+                })
+                .catch(error => console.error('Error fetching heatmap data:', error));
+        }
+
+        // 更新热力图
+        function updateHeatmap(data) {
+            var option = {
+                tooltip: {
+                    position: 'top'
+                },
+                grid: {
+                    height: '70%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.hours,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: data.days,
+                    splitArea: {
+                        show: true
+                    }
+                },
+                visualMap: {
+                    min: 0,
+                    max: Math.max(...data.data.map(item => item[2])),
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: '2%'
+                },
+                series: [
+                    {
+                        name: '活动频率',
+                        type: 'heatmap',
+                        data: data.data,
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            heatmapChart.setOption(option);
+        }
+
+        // 获取气泡图数据
+        function fetchBubbleData() {
+            fetch('/daily_top_animals')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Bubble Data:", data);  // 打印接收到的数据
+                    updateBubbleChart(data);
+                })
+                .catch(error => console.error('Error fetching bubble data:', error));
+        }
+
+        // 更新气泡图
+        function updateBubbleChart(data) {
+            var seriesData = [];
+            var dates = Object.keys(data).sort(); // 按日期排序
+            var animalColors = {}; // 每种动物的颜色
+
+            dates.forEach((date, dateIndex) => {
+                data[date].forEach((animal, animalIndex) => {
+                    if (!animalColors[animal.label]) {
+                        animalColors[animal.label] = getRandomColor(); // 为每种动物分配随机颜色
+                    }
+                    seriesData.push({
+                        name: animal.label,
+                        value: [dateIndex, animal.count, animal.label], // x 轴为日期索引，y 轴为数量，气泡大小为固定值
+                        itemStyle: {
+                            color: animalColors[animal.label]
+                        }
+                    });
+                });
+            });
+
+            var option = {
+                xAxis: {
+                    type: 'category',
+                    data: dates, // 横坐标为日期
+                    name: '日期',
+                    nameGap: 16,
+                    nameTextStyle: {
+                        fontSize: 16
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '数量',
+                    nameLocation: 'end',
+                    nameGap: 20,
+                    nameTextStyle: {
+                        fontSize: 16
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                },
+                tooltip: {
+                    formatter: function (params) {
+                        return `${params.value[2]}: ${params.value[1]}`;
+                    }
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        data: seriesData,
+                        symbolSize: function (value) {
+                            return Math.sqrt(value[1]) * 5; // 气泡大小与数量成正比
+                        },
+                        emphasis: {
+                            focus: 'self'
+                        }
+                    }
+                ]
+            };
+            bubbleChart.setOption(option);
+        }
+
+        // 生成随机颜色
+        function getRandomColor() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        }
+
+        // 每隔 5 秒更新图表
+        setInterval(fetchChartData, 5000);
+        setInterval(fetchPieData, 5000);
+        setInterval(fetchTimeSeriesData, 5000);
+        setInterval(fetchHeatmapData, 5000);
+        setInterval(fetchBubbleData, 5000);
+
+        // 页面加载时初始化图表
+        fetchChartData();
+        fetchPieData();
+        fetchTimeSeriesData();
+        fetchHeatmapData();
+        fetchBubbleData();
+    </script>
 </body>
 </html>
