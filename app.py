@@ -20,15 +20,18 @@ track_history = defaultdict(list)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'root123',
+    # 'password': 'root123',
+    'password': 'password',
     'database': 'yolo'
 }
+
 
 # 加载模型
 def load_model():
     global model
     model = YOLOv10.from_pretrained('jameslahm/yolov10n')
     # print("Model loaded successfully")
+
 
 # 连接到 MySQL 数据库
 def get_db_connection():
@@ -39,6 +42,7 @@ def get_db_connection():
     except Exception as e:
         # print(f"Error connecting to database: {e}")
         raise
+
 
 # 存储检测数据到 MySQL
 def store_detection_data(label, confidence, box, track_id):
@@ -61,6 +65,7 @@ def store_detection_data(label, confidence, box, track_id):
         print(f"Error storing detection data: {e}")
     finally:
         conn.close()
+
 
 # 非极大值抑制 (NMS)
 def nms(boxes, scores, iou_threshold=0.5):
@@ -88,9 +93,11 @@ def nms(boxes, scores, iou_threshold=0.5):
         order = order[inds + 1]
     return keep
 
+
 # 实时摄像头检测
 def generate_frames():
-    cap = cv2.VideoCapture(0)  # 0 表示默认摄像头设备
+    cap = cv2.VideoCapture(3)
+    # cap = cv2.VideoCapture(1)  # 0 表示默认摄像头设备
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -101,6 +108,7 @@ def generate_frames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
     cap.release()
+
 
 def detect_objects(frame, model):
     results = model.predict(frame)
@@ -145,16 +153,19 @@ def detect_objects(frame, model):
 
     return frame
 
+
 # 路由渲染前端页面
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 # 路由处理实时摄像头检测请求
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 # 路由返回柱状图数据
 @app.route('/chart_data')
@@ -188,6 +199,7 @@ def chart_data():
             'values': []
         })
 
+
 # 路由返回饼图数据
 @app.route('/pie_data')
 def get_pie_data():
@@ -210,6 +222,7 @@ def get_pie_data():
     except Exception as e:
         # print(f"Error fetching pie data: {e}")
         return jsonify([])
+
 
 @app.route('/time_series_data')
 def get_time_series_data():
@@ -314,6 +327,7 @@ def get_time_heatmap_data():
             'data': []
         })
 
+
 @app.route('/scatter_paths')
 def get_scatter_paths():
     scatter_paths = [
@@ -324,6 +338,7 @@ def get_scatter_paths():
         "path://M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zM10 14c-1.105 0-2-1.343-2-3s0.895-3 2-3 2 1.343 2 3-0.895 3-2 3zM16 26c-2.209 0-4-1.791-4-4s1.791-4 4-4c2.209 0 4 1.791 4 4s-1.791 4-4 4zM22 14c-1.105 0-2-1.343-2-3s0.895-3 2-3 2 1.343 2 3-0.895 3-2 3z"
     ]
     return jsonify(scatter_paths)
+
 
 @app.route('/daily_top_animals')
 def get_daily_top_animals():
@@ -359,6 +374,7 @@ def get_daily_top_animals():
     except Exception as e:
         print(f"Error fetching daily top animals data: {e}")
         return jsonify({})
+
 
 # @app.route('/animal_paths')
 # def get_animal_paths():
