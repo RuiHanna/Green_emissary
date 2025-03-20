@@ -48,3 +48,14 @@
 
 团队根据分工在各页面分支下撰写代码并及时同步到远程仓库，各页面开发结束后，经小组成员讨论审核，汇总到main(master)分支。
 
+------
+### How to run the knowledge popularization platform
+To connect mysql database:
+```bash
+node index/backend/server.js
+```
+
+To run Vue app:
+```bash
+npm run serve
+```
