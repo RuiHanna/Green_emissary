@@ -57,5 +57,6 @@ node index/backend/server.js
 
 To run Vue app:
 ```bash
+cd index
 npm run serve
 ```
