@@ -9,7 +9,7 @@ CORS(app)  # 允许跨域访问
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': '123456',
+    'password': 'password',
     'database': 'quiz_app'
 }
 
@@ -21,7 +21,7 @@ def get_questions():
         cursor = connection.cursor(dictionary=True)
 
         # 获取所有问题
-        cursor.execute("SELECT * FROM questions")
+        cursor.execute("SELECT * FROM questions ORDER BY RAND() LIMIT 10")
         questions = cursor.fetchall()
 
         # 获取所有选项
